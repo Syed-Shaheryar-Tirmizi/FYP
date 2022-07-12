@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "649996442685",
+    "project_id": "starlit-hangar-304315",
+    "storage_bucket": "starlit-hangar-304315.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649996442685:android:093fd1150793ad26c59e54",
+        "android_client_info": {
+          "package_name": "com.syed.map_crimes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "649996442685-1gsrv3620g94h1o0o91ne78okmras460.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtxxZPOhu3AWzu19sUtF6WNJkxYQZvcRo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "649996442685-1gsrv3620g94h1o0o91ne78okmras460.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

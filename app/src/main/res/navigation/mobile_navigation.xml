@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/MapCrimes">
+
+    <fragment
+        android:id="@+id/MapCrimes"
+        android:name="com.syed.map_crimes.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/Hotspot_areas"
+        android:name="com.syed.map_crimes.ui.hotspots.hotspotsfragment"
+        android:label="Hotspot Areas"
+        tools:layout="@layout/fragment_hotspots" />
+
+    <fragment
+        android:id="@+id/graphs"
+        android:name="com.syed.map_crimes.ui.graphs.graphsFragment"
+        android:label="Graphs"
+        tools:layout="@layout/fragment_graphs" />
+
+    <fragment
+        android:id="@+id/aboutus"
+        android:name="com.syed.map_crimes.AboutUsFragment"
+        android:label="About Us"
+        tools:layout="@layout/fragment_about_us" />
+
+    <fragment
+        android:id="@+id/help"
+        android:name="com.syed.map_crimes.HelpFragment"
+        android:label="Help"
+        tools:layout="@layout/fragment_about_us" />
+</navigation>

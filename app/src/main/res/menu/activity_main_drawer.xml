@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item
+        android:title="Services">
+        <menu>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/MapCrimes"
+            android:icon="@drawable/placeholder"
+            android:title="Location" />
+        <item
+            android:id="@+id/Hotspot_areas"
+            android:icon="@drawable/hotspot"
+            android:title="Hotspot Areas" />
+        <item
+            android:id="@+id/graphs"
+            android:icon="@drawable/increase"
+            android:title="Graphs" />
+        
+    </group>
+    </menu>
+    </item>
+
+    <item
+        android:title="Contact Us">
+        <menu>
+            <group android:checkableBehavior="single">
+            <item
+                android:id="@+id/aboutus"
+                android:icon="@drawable/about"
+                android:title="About Us" />
+
+                <item
+                    android:id="@+id/help"
+                    android:icon="@drawable/help"
+                    android:title="Help" />
+            </group>
+        </menu>
+    </item>
+
+</menu>
