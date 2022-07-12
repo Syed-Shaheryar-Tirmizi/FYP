@@ -1,0 +1,60 @@
+---
+# Ya ALI (AS) Madad
+
+output: html_document
+---
+
+## Crime Hotspot Areas Map
+<center>
+
+```{r fig.height=7,echo=FALSE, warning=FALSE, message=FALSE}
+
+library(dplyr)
+library(stringr)
+library(leaflet)
+library(ggplot2)
+library(scales)
+library(leaflet.extras)
+
+data <- read.csv("a.csv")
+
+filtered_Data <- select(data, c(PdId, IncidntNum, Incident.Code, Category, Descript, DayOfWeek, Date, Time, PdDistrict, Resolution, Address, X, Y, location))
+
+case_Conversion <- function(x) { str_to_title(x) }
+
+filtered_Data$Category <- case_Conversion(filtered_Data$Category)
+filtered_Data$Descript <- case_Conversion(filtered_Data$Descript)
+filtered_Data$Resolution <- case_Conversion(filtered_Data$Resolution)
+filtered_Data$PdDistrict <- case_Conversion(filtered_Data$PdDistrict)
+
+filtered_Data$popup <- paste("<b>Incident #: </b>", filtered_Data$IncidntNum, "<br>", "<b>Category: </b>", data$Category,
+                             "<br>", "<b>Description: </b>", filtered_Data$Descript,
+                             "<br>", "<b>Day of week: </b>", filtered_Data$DayOfWeek,
+                             "<br>", "<b>Date: </b>", filtered_Data$Date,
+                             "<br>", "<b>Time: </b>", filtered_Data$Time,
+                             "<br>", "<b>PD district: </b>", filtered_Data$PdDistrict,
+                             "<br>", "<b>Address: </b>", filtered_Data$Address,
+                             "<br>", "<b>Longitude: </b>", filtered_Data$X,
+                             "<br>", "<b>Latitude: </b>", filtered_Data$Y)
+
+
+leaflet(filtered_Data, width = "90%") %>% addTiles() %>%
+      addTiles(group = "OSM (default)") %>%
+      addProviderTiles(provider = "Esri.WorldStreetMap",group = "World StreetMap") %>%
+      addProviderTiles(provider = "Esri.WorldImagery",group = "World Imagery") %>%
+      addMarkers(lng = ~X, lat = ~Y, popup = filtered_Data$popup, label = filtered_Data$Address, group = "filtered_Data$popup", clusterOptions = markerClusterOptions()) %>%
+      addLayersControl(baseGroups = c("OSM (default)","World StreetMap", "World Imagery"),
+            options = layersControlOptions(collapsed = FALSE))  %>%
+            setView(lng = -122.449389111284, lat = 37.7426688025766, zoom = 11.5) %>%
+   addSearchOSM(options = searchOptions(autoCollapse = TRUE, minLength = 2)) %>%
+            addSearchFeatures(
+                targetGroups = "filtered_Data$popup",
+                options = searchFeaturesOptions(zoom = 15,
+                                                openPopup = TRUE,
+                                                firstTipSubmit = TRUE,
+                                                autoCollapse = TRUE,
+                                                hideMarkerOnCollapse = TRUE))
+
+
+```
+</center>

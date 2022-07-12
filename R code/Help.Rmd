@@ -1,0 +1,93 @@
+---
+# Ya ALI (AS) Madad
+output: html_document
+---
+
+## A comprehensive User Manual
+
+### Overview
+
+* This app triggers notification to the user when user enters / leave the hostspot / dangerous area.
+
+* User can see itself on the map just like google maps.
+
+* User can see hotspot areas on the leaflet map and can interact with them to anylze which crime occurs there, crime time etc.
+
+* In case of any emergency, user can send message via whatsApp.
+
+* User can also visualize and analysze different graphs and data table about crime cateogories e-g Top 10 crime categories, their percentage composities etc.
+
+* This app runs in the background so that user can get real time notifications.
+
+* For any querry / feedback, user can directly contact the developer via social media, call and gmail.
+
+### Modules
+
+### 1 Home
+
+* The Home Screen shows the current location of the user.
+
+* The blue circles on it show the dangerous areas.
+
+* For accurate location, GPS must be turn ON.
+
+* User must give location permission at first start up.
+
+* If permission denied, then user can again give it by going to mobile setting, then select crime inisghts app from the application manager and allow location permission.
+
+* Wait 2-3 sec till the map navigates to your current location.
+
+
+### 2 Hotspot Areas
+
+* The Hotspot Areas screen shows the hotspot areas map together with the crime deatils assoiciated with it.
+
+* User can interact it by tapping the areas.
+
+* There is a search option on it. User can enter and search the area name.
+
+* If area is the hotspot, it will show up. Otherwise, "Location no found" is shown.
+
+
+### 3 Graphs
+
+* The Graphs Screen shows different graphs and data table of crime.
+
+* User can get different information from this page regarding top crime activities, crime times, frequency etc.
+
+* There are also frequency graphs for top 3 crime categories.
+
+* These show the frequency of crime per year with repect to each hour and day.
+
+* Light shade shows less frequency while dark shade shows high frequency.
+
+
+### 4 Send Location
+
+* There are 2 ways by which user can send location via whatsapp.
+
+* One way is to send location by tapping on the floating action button on Home screen.
+
+* Other way is to open menu by tapping on the 3 dots at top right corner. Then click on th send location item.
+
+* Both methods open the whatsapp and all you need is to choose contact whom you want to send location.
+
+* If you see "please wait" toast, then wait 1-2 sec.
+
+
+### 5 Contact Us
+
+* The Contact Us page shows the details about developers.
+
+* User can follow the developers on social media, call the developer and send mail by tapping icons.
+
+
+### 6 Permissions
+
+* Location Permission, GPS and internet must be turned ON.
+
+* If you want to stop running app in background, simply go to menu and exit app.
+
+* For some devices, app does not run in background itself.
+
+* if this happens to you, simply go to menu and click on the item start background service

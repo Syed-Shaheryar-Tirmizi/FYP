@@ -1,0 +1,216 @@
+---
+# Ya ALI (AS) Madad
+
+output: html_document
+---
+
+### Crime events count for each category (with percentage)
+
+$$\\[0.1in]$$
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+library(DT)
+library(ggplot2)
+library(scales)
+#library(plotly)
+library(dplyr)
+
+data <- read.csv("Police_Department_Incident_Reports__Historical_2008_to_feb_2021.csv")
+category_data <- sort(table(data$Category), decreasing = TRUE)
+category_data <- data.frame(category_data)
+colnames(category_data) <- c("Category", "Count")
+category_data$Percentage <- round((category_data$Count / sum(category_data$Count)) * 100, digits = 4)
+ 
+
+datatable(category_data, options = list(scrollX='400px'))
+
+```
+$$\\[0.1in]$$
+```{r fig.height=10, fig.width=10, echo=FALSE, warning=FALSE, message=FALSE}
+topTenCrimes <- category_data[1:10,] 
+barChart <- ggplot(topTenCrimes, aes(x = Category, y = Count, fill = Category))
+barChart <- barChart + geom_bar(width = 0.5, stat = "identity")
+barChart <- barChart + scale_y_continuous(labels = comma)
+barChart <- barChart +  theme(plot.title = element_text(size=24), axis.text.x = element_text(angle = 90)) + labs(title = "Visualization of the Top 10 Crime Categories")
+barChart
+#ggplotly(barChart)
+```
+$$\\[0.1in]$$
+```{r fig.height=10, fig.width=10, echo=FALSE, warning=FALSE, message=FALSE}
+Yearly_Crime <- data %>%
+  mutate(Date = as.Date(Date, "%m/%d/%Y")) %>%
+  group_by(Date) %>%
+  summarize(count = n()) %>%
+  arrange(Date)
+
+
+plot <- ggplot(Yearly_Crime, aes(x = Date, y = count)) +
+  geom_bar(stat = "identity") +
+  scale_x_date(breaks = date_breaks("1 year"), labels = date_format("%Y")) +
+  theme(plot.title = element_text(size=24)) +
+  labs(x = "Date of Crime", y = "Number of Crimes", title = "Daily Crimes in San Francisco from 2008 – 2021")
+plot
+```
+
+$$\\[0.1in]$$
+
+```{r fig.height=10, fig.width=10, echo=FALSE, warning=FALSE, message=FALSE}
+murder_data <- data %>% filter(grepl("MURDER", Category))
+
+murder_daily <- murder_data %>%
+  mutate(Date = as.Date(Date, "%m/%d/%Y")) %>%
+  group_by(Date) %>%
+  summarize(count = n()) %>%
+  arrange(Date)
+
+
+plot <- ggplot(murder_daily, aes(x = Date, y = count)) +
+  geom_line(color = "#F2CA27", size = 0.1) +
+  geom_smooth(color = "#1A1A1A") +
+
+  scale_x_date(breaks = date_breaks("1 year"), labels = date_format("%Y")) +
+  theme(plot.title = element_text(size=24)) +
+  labs(x = "Murder Date", y = "Number of Murders", title = "Daily Murders in San Francisco from 2008 – 2021")
+plot
+```
+
+
+### Data Table of Murders with respect to each day and hour (Yearly)
+
+
+```{r fig.width=10, echo=FALSE, warning=FALSE, message=FALSE}
+get_hour <- function(x) {
+  return (as.numeric(strsplit(x,":")[[1]][1]))
+}
+
+murder_time <- murder_data %>%
+  mutate(Hour = sapply(Time, get_hour)) %>%
+  group_by(DayOfWeek, Hour) %>%
+  summarize(count = n())
+
+dow_format <- c("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday")
+hour_format <- c(paste(c(12,1:11),"AM"), paste(c(12,1:11),"PM"))
+
+murder_time$DayOfWeek <- factor(murder_time$DayOfWeek, level = rev(dow_format))
+murder_time$Hour <- factor(murder_time$Hour, level = 0:23, label = hour_format)
+datatable(murder_time, options = list(scrollX='400px'))
+```
+
+$$\\[0.1in]$$
+
+
+```{r fig.height=10, fig.width=10, echo=FALSE, warning=FALSE, message=FALSE}
+plot <- ggplot(murder_time, aes(x = Hour, y = DayOfWeek, fill = count)) +
+  geom_tile() +
+  # fte_theme() +
+  theme(plot.title = element_text(size=24) ,axis.text.x = element_text(angle = 90, vjust = 0.6), legend.title = element_blank(), legend.position="top", legend.direction="horizontal", legend.key.width=unit(2, "cm"), legend.key.height=unit(0.25, "cm"), legend.margin=unit(-0.5,"cm"), panel.margin=element_blank()) +
+  labs(x = "Hour of Murder (Local Time)", y = "Day of Week of Murder", title = "Number of Murders in San Francisco from 2008 – 2021") +
+  scale_fill_gradient(low = "white", high = "#27AE60", labels = comma)
+plot
+```
+$$\\[0.1in]$$
+
+```{r fig.height=10, fig.width=10, echo=FALSE, warning=FALSE, message=FALSE}
+assault_data <- data %>% filter(grepl("ASSAULT", Category))
+
+assault_daily <- assault_data %>%
+  mutate(Date = as.Date(Date, "%m/%d/%Y")) %>%
+  group_by(Date) %>%
+  summarize(count = n()) %>%
+  arrange(Date)
+
+
+plot <- ggplot(assault_daily, aes(x = Date, y = count)) +
+  geom_line(color = "#F2CA27", size = 0.1) +
+  geom_smooth(color = "#1A1A1A") +
+
+  scale_x_date(breaks = date_breaks("1 year"), labels = date_format("%Y")) +
+  theme(plot.title = element_text(size=24)) +
+  labs(x = "Assault Date", y = "Number of Assaults", title = "Daily Assaults in San Francisco from 2008 – 2021")
+plot
+```
+
+
+### Data Table of Assaults with respect to each day and hour (Yearly)
+
+
+```{r fig.width=10, echo=FALSE, warning=FALSE, message=FALSE}
+
+assault_time <- assault_data %>%
+  mutate(Hour = sapply(Time, get_hour)) %>%
+  group_by(DayOfWeek, Hour) %>%
+  summarize(count = n())
+
+dow_format <- c("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday")
+hour_format <- c(paste(c(12,1:11),"AM"), paste(c(12,1:11),"PM"))
+
+assault_time$DayOfWeek <- factor(assault_time$DayOfWeek, level = rev(dow_format))
+assault_time$Hour <- factor(assault_time$Hour, level = 0:23, label = hour_format)
+datatable(assault_time, options = list(scrollX='400px'))
+```
+
+$$\\[0.1in]$$
+
+
+```{r fig.height=10, fig.width=10, echo=FALSE, warning=FALSE, message=FALSE}
+plot <- ggplot(assault_time, aes(x = Hour, y = DayOfWeek, fill = count)) +
+  geom_tile() +
+  # fte_theme() +
+  theme(plot.title = element_text(size=24) ,axis.text.x = element_text(angle = 90, vjust = 0.6), legend.title = element_blank(), legend.position="top", legend.direction="horizontal", legend.key.width=unit(2, "cm"), legend.key.height=unit(0.25, "cm"), legend.margin=unit(-0.5,"cm"), panel.margin=element_blank()) +
+  labs(x = "Hour of Assault (Local Time)", y = "Day of Week of Assault", title = "Number of Assaults in San Francisco from 2008 – 2021") +
+  scale_fill_gradient(low = "white", high = "#E74C3C", labels = comma)
+plot
+```
+$$\\[0.1in]$$
+
+```{r fig.height=10, fig.width=10, echo=FALSE, warning=FALSE, message=FALSE}
+robbery_data <- data %>% filter(grepl("ROBBERY", Category))
+
+robbery_daily <- robbery_data %>%
+  mutate(Date = as.Date(Date, "%m/%d/%Y")) %>%
+  group_by(Date) %>%
+  summarize(count = n()) %>%
+  arrange(Date)
+
+
+plot <- ggplot(robbery_daily, aes(x = Date, y = count)) +
+  geom_line(color = "#F2CA27", size = 0.1) +
+  geom_smooth(color = "#1A1A1A") +
+
+  scale_x_date(breaks = date_breaks("1 year"), labels = date_format("%Y")) +
+  theme(plot.title = element_text(size=24)) +
+  labs(x = "Robbery Date", y = "Number of Robberies", title = "Daily Robberies in San Francisco from 2008 – 2021")
+plot
+```
+
+
+### Data Table of Robberies with respect to each day and hour (Yearly)
+
+
+
+```{r fig.width=10, echo=FALSE, warning=FALSE, message=FALSE}
+
+robbery_time <- robbery_data %>%
+  mutate(Hour = sapply(Time, get_hour)) %>%
+  group_by(DayOfWeek, Hour) %>%
+  summarize(count = n())
+
+dow_format <- c("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday")
+hour_format <- c(paste(c(12,1:11),"AM"), paste(c(12,1:11),"PM"))
+
+robbery_time$DayOfWeek <- factor(robbery_time$DayOfWeek, level = rev(dow_format))
+robbery_time$Hour <- factor(robbery_time$Hour, level = 0:23, label = hour_format)
+datatable(robbery_time, options = list(scrollX='400px'))
+```
+
+$$\\[0.1in]$$
+
+
+```{r fig.height=10, fig.width=10, echo=FALSE, warning=FALSE, message=FALSE}
+plot <- ggplot(robbery_time, aes(x = Hour, y = DayOfWeek, fill = count)) +
+  geom_tile() +
+  theme(plot.title = element_text(size=24) ,axis.text.x = element_text(angle = 90, vjust = 0.6), legend.title = element_blank(), legend.position="top", legend.direction="horizontal", legend.key.width=unit(2, "cm"), legend.key.height=unit(0.25, "cm"), legend.margin=unit(-0.5,"cm"), panel.margin=element_blank()) +
+  labs(x = "Hour of Robbery (Local Time)", y = "Day of Week of Robbery", title = "Number of Robberies in San Francisco from 2008 – 2021") +
+  scale_fill_gradient(low = "white", high = "#8E44AD", labels = comma)
+plot
+```
